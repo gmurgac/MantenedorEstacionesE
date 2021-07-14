@@ -16,6 +16,11 @@ namespace EstacionesElectricasDAL.DTO
         private Tipo tipo;
         private int idEstacion;
 
+        public override string ToString()
+        {
+            return base.ToString() + "" + id.ToString();
+        }
+
         public int Id { get => id; set => id = value; }
         public Tipo Tipo { get => tipo; set => tipo = value; }
         public int IdEstacion { get => idEstacion; set => idEstacion = value; }

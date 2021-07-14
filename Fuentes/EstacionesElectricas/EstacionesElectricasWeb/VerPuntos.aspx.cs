@@ -25,6 +25,7 @@ namespace EstacionesElectricasWeb
         {
             puntosGrid.DataSource = puntos;
             puntosGrid.DataBind();
+            
         }
         protected void puntosGrid_RowCommand(object sender, GridViewCommandEventArgs e)
         {
@@ -34,19 +35,38 @@ namespace EstacionesElectricasWeb
                 PuntosDAL puntoDAL = new PuntosDAL();
                 puntoDAL.Remove(Convert.ToInt32(idAEliminar));
                 CargarTabla(new PuntosDAL().GetAll());
-            }else if(e.CommandName == "modificar")
-            {
-                //Modificar registro
             }
         }
         protected void puntosGrid_RowEditing(object sender,GridViewEditEventArgs e)
         {
             puntosGrid.EditIndex = e.NewEditIndex;
-
+            
             int id = Convert.ToInt32(puntosGrid.DataKeys[e.NewEditIndex].Value);
             PuntosDAL puntoDAL = new PuntosDAL();
             DataRow row = puntoDAL.GetPuntoByID(id);
             CargarTabla(new PuntosDAL().GetAll());
+            DropDownList combo1 = puntosGrid.Rows[e.NewEditIndex].FindControl("ddlTipo") as DropDownList;
+            if (combo1 != null)
+            {
+                Tipo tipo = new Tipo();
+                combo1.DataSource = System.Enum.GetNames(tipo.GetType());
+                combo1.DataBind();
+            }
+
+            combo1.SelectedValue = Convert.ToString(row["tipo"]);
+
+            DropDownList combo = puntosGrid.Rows[e.NewEditIndex].FindControl("ddlDirEstacion") as DropDownList;
+            if (combo != null)
+            {
+                combo.DataSource = new EstacionesDAL().GetAll();
+                combo.DataTextField = "direccion";
+                combo.DataValueField = "id";
+                combo.DataBind();
+            }
+
+           combo.SelectedValue = Convert.ToString(row["id"]);
+
+           
         }
         protected void puntosGrid_RowCancelingEdit(object sender,GridViewCancelEditEventArgs e)
         {
@@ -57,19 +77,21 @@ namespace EstacionesElectricasWeb
         {
             Punto punto = new Punto();
             int id = Convert.ToInt32(puntosGrid.DataKeys[e.RowIndex].Value);
-            TextBox idText = puntosGrid.Rows[e.RowIndex].Cells[1].Controls[0] as TextBox;
-            TextBox tipoText = puntosGrid.Rows[e.RowIndex].Cells[2].Controls[0] as TextBox;
-            TextBox idEstacion = puntosGrid.Rows[e.RowIndex].Cells[3].Controls[0] as TextBox;
+            
+            DropDownList tipoddl = puntosGrid.Rows[e.RowIndex].FindControl("ddlTipo") as DropDownList;
+            DropDownList idEstacion = puntosGrid.Rows[e.RowIndex].FindControl("ddlDirEstacion") as DropDownList;
 
-            punto.Id = Convert.ToInt32(idText.Text);
-            if(tipoText.Text == "Dual")
+            //punto.Id = Convert.ToInt32(idText.Text);
+           int idPunto = Convert.ToInt32(e.NewValues["id"]);
+            punto.Id = id;
+            if (tipoddl.SelectedValue == "Dual")
             {
                 punto.Tipo = Tipo.Dual;
-            }else if(tipoText.Text == "Electrico")
+            }else if(tipoddl.SelectedValue == "Electrico")
             {
                 punto.Tipo = Tipo.Electrico;
             }
-            punto.IdEstacion = Convert.ToInt32(idEstacion.Text);
+            punto.IdEstacion = Convert.ToInt32(idEstacion.SelectedValue);
 
             PuntosDAL pdal = new PuntosDAL();
             pdal.Modificar(punto);
@@ -78,6 +100,24 @@ namespace EstacionesElectricasWeb
 
             puntosGrid.EditIndex = -1;
             CargarTabla(new PuntosDAL().GetAll());
+        }
+        protected void tipoDdl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string tipoSeleccionado = tipoDdl.SelectedValue;
+            if(tipoSeleccionado == "dual")
+            {
+                List<Punto> filtrada = new PuntosDAL().GetAll(Tipo.Dual);
+                CargarTabla(filtrada);
+            }else if (tipoSeleccionado == "electrico")
+            {
+                List<Punto> filtrada = new PuntosDAL().GetAll(Tipo.Electrico);
+                CargarTabla(filtrada);
+            }
+            else if(tipoSeleccionado == "nulo")
+            {
+                CargarTabla(new PuntosDAL().GetAll());
+            }
+            
         }
     }
 }

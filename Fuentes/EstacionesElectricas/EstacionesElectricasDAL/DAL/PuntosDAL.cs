@@ -24,6 +24,10 @@ namespace EstacionesElectricasDAL.DAL
         {
             return puntos;
         }
+        public List<Punto> GetAll(Tipo tipo)
+        {
+            return puntos.FindAll(c => c.Tipo == tipo);
+        }
         public void Remove(int id)
         {
             Punto e = puntos.Find(es => es.Id == id);
