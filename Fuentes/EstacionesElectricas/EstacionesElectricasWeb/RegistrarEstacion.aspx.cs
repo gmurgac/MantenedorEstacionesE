@@ -1,5 +1,6 @@
-﻿using EstacionesElectricasDAL.DAL;
-using EstacionesElectricasDAL.DTO;
+﻿
+using MantenedorEstacionesDB;
+using MantenedorEstacionesDB.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,11 +29,11 @@ namespace EstacionesElectricasWeb
                 string direccion = dirEstacion.Text.Trim();
 
                 Estacion es = new Estacion();
-                es.Id = id;
-                es.Direccion = direccion;
+                es.id = id;
+                es.direccion = direccion;
 
                 EstacionesDAL estaciones = new EstacionesDAL();
-                estaciones.Guardar(es);
+                estaciones.Save(es);
 
                 Limpiar();
             }

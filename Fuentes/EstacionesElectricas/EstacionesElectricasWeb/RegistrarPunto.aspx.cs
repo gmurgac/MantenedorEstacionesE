@@ -1,5 +1,6 @@
-﻿using EstacionesElectricasDAL.DAL;
-using EstacionesElectricasDAL.DTO;
+﻿
+using MantenedorEstacionesDB;
+using MantenedorEstacionesDB.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,8 @@ namespace EstacionesElectricasWeb
             {
                 List<Estacion> estaciones = new EstacionesDAL().GetAll();
                 estacionesDdl.DataSource = estaciones;
-                estacionesDdl.DataTextField = "Direccion";
-                estacionesDdl.DataValueField = "Id";
+                estacionesDdl.DataTextField = "direccion";
+                estacionesDdl.DataValueField = "id";
                 estacionesDdl.DataBind();
             }
         }
@@ -32,22 +33,22 @@ namespace EstacionesElectricasWeb
         {
             if (Page.IsValid)
             {
-                int id = Convert.ToInt16(idPunto.Text.Trim());
+                int id = Convert.ToInt32(idPunto.Text.Trim());
                 string tipo = tipoRbl.SelectedValue;
-                int idEstacion = Convert.ToInt16(estacionesDdl.SelectedValue);
+                int idEstacion = Convert.ToInt32(estacionesDdl.SelectedValue);
 
                 Punto punto = new Punto();
-                punto.Id = id;
-                punto.IdEstacion = idEstacion;
+                punto.id = id;
+                punto.idEstacion = idEstacion;
                 if(tipo == "Dual")
                 {
-                    punto.Tipo = Tipo.Dual;
+                    punto.idTipo = 1;
                 }else if(tipo == "Electrico")
                 {
-                    punto.Tipo = Tipo.Electrico;
+                    punto.idTipo = 2;
                 }
                 PuntosDAL puntos = new PuntosDAL();
-                puntos.Guardar(punto);
+                puntos.Save(punto);
                 Limpiar();
             }
         }

@@ -1,5 +1,6 @@
-﻿using EstacionesElectricasDAL.DAL;
-using EstacionesElectricasDAL.DTO;
+﻿
+using MantenedorEstacionesDB;
+using MantenedorEstacionesDB.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace EstacionesElectricasWeb
             {
                 String idAEliminar = e.CommandArgument.ToString().Trim();
                 EstacionesDAL estacionDAL = new EstacionesDAL();
-                estacionDAL.Remove(Convert.ToInt32(idAEliminar));
+                estacionDAL.Erase(Convert.ToInt32(idAEliminar));
                 CargarTabla(new EstacionesDAL().GetAll());
             }
         }

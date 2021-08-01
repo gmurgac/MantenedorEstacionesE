@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MantenedorEstacionesBDModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Estacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="direccion" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Punto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="idTipo" Type="int" Nullable="false" />
+          <Property Name="idEstacion" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TipoPunto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="fk_punto_estacion">
+          <End Role="Estacion" Type="Self.Estacion" Multiplicity="1" />
+          <End Role="Punto" Type="Self.Punto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estacion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Punto">
+              <PropertyRef Name="idEstacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_punto_tipo">
+          <End Role="TipoPunto" Type="Self.TipoPunto" Multiplicity="1" />
+          <End Role="Punto" Type="Self.Punto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoPunto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Punto">
+              <PropertyRef Name="idTipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MantenedorEstacionesBDModelStoreContainer">
+          <EntitySet Name="Estacion" EntityType="Self.Estacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Punto" EntityType="Self.Punto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoPunto" EntityType="Self.TipoPunto" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_punto_estacion" Association="Self.fk_punto_estacion">
+            <End Role="Estacion" EntitySet="Estacion" />
+            <End Role="Punto" EntitySet="Punto" />
+          </AssociationSet>
+          <AssociationSet Name="fk_punto_tipo" Association="Self.fk_punto_tipo">
+            <End Role="TipoPunto" EntitySet="TipoPunto" />
+            <End Role="Punto" EntitySet="Punto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MantenedorEstacionesBDModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Estacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="direccion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Punto" Relationship="Self.fk_punto_estacion" FromRole="Estacion" ToRole="Punto" />
+        </EntityType>
+        <EntityType Name="Punto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="idTipo" Type="Int32" Nullable="false" />
+          <Property Name="idEstacion" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Estacion" Relationship="Self.fk_punto_estacion" FromRole="Punto" ToRole="Estacion" />
+          <NavigationProperty Name="TipoPunto" Relationship="Self.fk_punto_tipo" FromRole="Punto" ToRole="TipoPunto" />
+        </EntityType>
+        <EntityType Name="TipoPunto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Punto" Relationship="Self.fk_punto_tipo" FromRole="TipoPunto" ToRole="Punto" />
+        </EntityType>
+        <Association Name="fk_punto_estacion">
+          <End Role="Estacion" Type="Self.Estacion" Multiplicity="1" />
+          <End Role="Punto" Type="Self.Punto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estacion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Punto">
+              <PropertyRef Name="idEstacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_punto_tipo">
+          <End Role="TipoPunto" Type="Self.TipoPunto" Multiplicity="1" />
+          <End Role="Punto" Type="Self.Punto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoPunto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Punto">
+              <PropertyRef Name="idTipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MantenedorEstacionesBDEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Estacion" EntityType="Self.Estacion" />
+          <EntitySet Name="Punto" EntityType="Self.Punto" />
+          <EntitySet Name="TipoPunto" EntityType="Self.TipoPunto" />
+          <AssociationSet Name="fk_punto_estacion" Association="Self.fk_punto_estacion">
+            <End Role="Estacion" EntitySet="Estacion" />
+            <End Role="Punto" EntitySet="Punto" />
+          </AssociationSet>
+          <AssociationSet Name="fk_punto_tipo" Association="Self.fk_punto_tipo">
+            <End Role="TipoPunto" EntitySet="TipoPunto" />
+            <End Role="Punto" EntitySet="Punto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MantenedorEstacionesBDModelStoreContainer" CdmEntityContainer="MantenedorEstacionesBDEntities">
+          <EntitySetMapping Name="Estacion">
+            <EntityTypeMapping TypeName="MantenedorEstacionesBDModel.Estacion">
+              <MappingFragment StoreEntitySet="Estacion">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Punto">
+            <EntityTypeMapping TypeName="MantenedorEstacionesBDModel.Punto">
+              <MappingFragment StoreEntitySet="Punto">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idTipo" ColumnName="idTipo" />
+                <ScalarProperty Name="idEstacion" ColumnName="idEstacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoPunto">
+            <EntityTypeMapping TypeName="MantenedorEstacionesBDModel.TipoPunto">
+              <MappingFragment StoreEntitySet="TipoPunto">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

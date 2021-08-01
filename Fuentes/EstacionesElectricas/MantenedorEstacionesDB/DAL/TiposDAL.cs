@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstacionesElectricasDAL.DAL
+namespace MantenedorEstacionesDB.DAL
 {
-    public class EstacionesDAL
+    public class TiposDAL
     {
         public MantenedorEstacionesBDEntities db = new MantenedorEstacionesBDEntities();
 
-        public List<Estacion>
+        public List<TipoPunto> GetAll()
+        {
+            return db.TipoPunto.ToList();
+        }
     }
 }

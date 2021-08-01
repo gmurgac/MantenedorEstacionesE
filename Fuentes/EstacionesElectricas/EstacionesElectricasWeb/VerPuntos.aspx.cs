@@ -1,5 +1,6 @@
-﻿using EstacionesElectricasDAL.DAL;
-using EstacionesElectricasDAL.DTO;
+﻿
+using MantenedorEstacionesDB;
+using MantenedorEstacionesDB.DAL;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -33,7 +34,7 @@ namespace EstacionesElectricasWeb
             {
                 String idAEliminar = e.CommandArgument.ToString().Trim();
                 PuntosDAL puntoDAL = new PuntosDAL();
-                puntoDAL.Remove(Convert.ToInt32(idAEliminar));
+                puntoDAL.Erase(Convert.ToInt32(idAEliminar));
                 CargarTabla(new PuntosDAL().GetAll());
             }
         }
@@ -48,8 +49,10 @@ namespace EstacionesElectricasWeb
             DropDownList combo1 = puntosGrid.Rows[e.NewEditIndex].FindControl("ddlTipo") as DropDownList;
             if (combo1 != null)
             {
-                Tipo tipo = new Tipo();
-                combo1.DataSource = System.Enum.GetNames(tipo.GetType());
+                List<TipoPunto> tp = new TiposDAL().GetAll();
+                combo1.DataSource = tp;
+                combo1.DataValueField = "id";
+                combo1.DataTextField = "nombre";
                 combo1.DataBind();
             }
 
@@ -81,20 +84,20 @@ namespace EstacionesElectricasWeb
             DropDownList tipoddl = puntosGrid.Rows[e.RowIndex].FindControl("ddlTipo") as DropDownList;
             DropDownList idEstacion = puntosGrid.Rows[e.RowIndex].FindControl("ddlDirEstacion") as DropDownList;
 
-            //punto.Id = Convert.ToInt32(idText.Text);
+            //punto.id = Convert.ToInt32(idText.Text);
            int idPunto = Convert.ToInt32(e.NewValues["id"]);
-            punto.Id = id;
+            punto.id = id;
             if (tipoddl.SelectedValue == "Dual")
             {
-                punto.Tipo = Tipo.Dual;
+                punto.idTipo = 1;
             }else if(tipoddl.SelectedValue == "Electrico")
             {
-                punto.Tipo = Tipo.Electrico;
+                punto.idTipo = 2;
             }
-            punto.IdEstacion = Convert.ToInt32(idEstacion.SelectedValue);
+            punto.idEstacion = Convert.ToInt32(idEstacion.SelectedValue);
 
             PuntosDAL pdal = new PuntosDAL();
-            pdal.Modificar(punto);
+            //pdal.Modify(punto);
             //UPDATE
 
 
@@ -103,20 +106,20 @@ namespace EstacionesElectricasWeb
         }
         protected void tipoDdl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string tipoSeleccionado = tipoDdl.SelectedValue;
-            if(tipoSeleccionado == "dual")
-            {
-                List<Punto> filtrada = new PuntosDAL().GetAll(Tipo.Dual);
-                CargarTabla(filtrada);
-            }else if (tipoSeleccionado == "electrico")
-            {
-                List<Punto> filtrada = new PuntosDAL().GetAll(Tipo.Electrico);
-                CargarTabla(filtrada);
-            }
-            else if(tipoSeleccionado == "nulo")
-            {
-                CargarTabla(new PuntosDAL().GetAll());
-            }
+            //string tipoSeleccionado = tipoDdl.SelectedValue;
+            //if(tipoSeleccionado == "dual")
+            //{
+            //    List<Punto> filtrada = new PuntosDAL().GetAll(Tipo.Dual);
+            //    CargarTabla(filtrada);
+            //}else if (tipoSeleccionado == "electrico")
+            //{
+            //    List<Punto> filtrada = new PuntosDAL().GetAll(Tipo.Electrico);
+            //    CargarTabla(filtrada);
+            //}
+            //else if(tipoSeleccionado == "nulo")
+            //{
+            //    CargarTabla(new PuntosDAL().GetAll());
+            //}
             
         }
     }

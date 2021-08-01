@@ -1,49 +1,42 @@
-﻿using EstacionesElectricasDAL.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstacionesElectricasDAL.DAL
+namespace MantenedorEstacionesDB.DAL
 {
-    public class PuntosDAL
+   public class PuntosDAL
     {
-        private static List<Punto> puntos = new List<Punto>();
-        public void Guardar(Punto punto)
+        public MantenedorEstacionesBDEntities db = new MantenedorEstacionesBDEntities();
+
+        public void Save(Punto p)
         {
-            puntos.Add(punto);
-        }
-        public void Modificar(Punto punto)
-        {
-            var elementIndex = puntos.FindIndex(i => i.Id == punto.Id);
-            puntos[elementIndex] = punto;
+            db.Punto.Add(p);
+            db.SaveChanges();
         }
         public List<Punto> GetAll()
         {
-            return puntos;
+            return db.Punto.ToList();
         }
-        public List<Punto> GetAll(Tipo tipo)
+        public void Erase(int idPunto)
         {
-            return puntos.FindAll(c => c.Tipo == tipo);
-        }
-        public void Remove(int id)
-        {
-            Punto e = puntos.Find(es => es.Id == id);
-            puntos.Remove(e);
+            Punto p = db.Punto.Find(idPunto);
+            db.Punto.Remove(p);
+            db.SaveChanges(); //COMMIT
         }
 
         public DataRow GetPuntoByID(int id)
         {
             DataTable table;
-                table = MakeNamesTable();
+            table = MakeNamesTable();
             DataRow row;
-            Punto p = puntos.Find(f => f.Id == id);
+            Punto p = db.Punto.Find(id);
             row = table.NewRow();
-            row["id"] = p.Id;
-            row["tipo"] = p.Tipo;
-            row["idEstacion"] = p.IdEstacion;
+            row["id"] = p.id;
+            row["tipo"] = p.TipoPunto;
+            row["idEstacion"] = p.idEstacion;
 
             return row;
         }

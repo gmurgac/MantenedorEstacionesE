@@ -37,7 +37,7 @@
                  </asp:DropDownList>
              </EditItemTemplate>
              <ItemTemplate>
-                 <asp:Label ID="Label1" runat="server" Text='<%# Bind("tipo") %>'></asp:Label>
+                 <asp:Label ID="Label1" runat="server" Text='<%# Bind("idTipo") %>'></asp:Label>
              </ItemTemplate>
          </asp:TemplateField>
                 <asp:TemplateField HeaderText="Estacion"  >
