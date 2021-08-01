@@ -84,20 +84,20 @@ namespace EstacionesElectricasWeb
             DropDownList tipoddl = puntosGrid.Rows[e.RowIndex].FindControl("ddlTipo") as DropDownList;
             DropDownList idEstacion = puntosGrid.Rows[e.RowIndex].FindControl("ddlDirEstacion") as DropDownList;
 
-            //punto.id = Convert.ToInt32(idText.Text);
+            
            int idPunto = Convert.ToInt32(e.NewValues["id"]);
             punto.id = id;
-            if (tipoddl.SelectedValue == "Dual")
+            if (tipoddl.SelectedValue == "1")
             {
                 punto.idTipo = 1;
-            }else if(tipoddl.SelectedValue == "Electrico")
+            }else if(tipoddl.SelectedValue == "2")
             {
                 punto.idTipo = 2;
             }
             punto.idEstacion = Convert.ToInt32(idEstacion.SelectedValue);
 
             PuntosDAL pdal = new PuntosDAL();
-            //pdal.Modify(punto);
+            pdal.Modify(punto);
             //UPDATE
 
 
@@ -106,20 +106,20 @@ namespace EstacionesElectricasWeb
         }
         protected void tipoDdl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string tipoSeleccionado = tipoDdl.SelectedValue;
-            //if(tipoSeleccionado == "dual")
-            //{
-            //    List<Punto> filtrada = new PuntosDAL().GetAll(Tipo.Dual);
-            //    CargarTabla(filtrada);
-            //}else if (tipoSeleccionado == "electrico")
-            //{
-            //    List<Punto> filtrada = new PuntosDAL().GetAll(Tipo.Electrico);
-            //    CargarTabla(filtrada);
-            //}
-            //else if(tipoSeleccionado == "nulo")
-            //{
-            //    CargarTabla(new PuntosDAL().GetAll());
-            //}
+            string tipoSeleccionado = tipoDdl.SelectedValue;
+            if(tipoSeleccionado == "dual")
+            {
+                List<Punto> filtrada = new PuntosDAL().GetAll(1);
+                CargarTabla(filtrada);
+            }else if (tipoSeleccionado == "electrico")
+            {
+                List<Punto> filtrada = new PuntosDAL().GetAll(2);
+                CargarTabla(filtrada);
+            }
+            else if(tipoSeleccionado == "nulo")
+            {
+                CargarTabla(new PuntosDAL().GetAll());
+            }
             
         }
     }

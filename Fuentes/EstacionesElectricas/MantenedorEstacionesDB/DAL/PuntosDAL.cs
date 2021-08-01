@@ -20,6 +20,13 @@ namespace MantenedorEstacionesDB.DAL
         {
             return db.Punto.ToList();
         }
+        public List<Punto> GetAll(int idTipo)
+        {
+            var puntos = from p in db.Punto
+                        where p.idTipo == idTipo
+                        select p;
+            return puntos.ToList();
+        }
         public void Erase(int idPunto)
         {
             Punto p = db.Punto.Find(idPunto);
@@ -70,6 +77,13 @@ namespace MantenedorEstacionesDB.DAL
 
             // Return the new DataTable.
             return namesTable;
+        }
+
+        public void Modify(Punto punto)
+        {
+            Erase(punto.id);
+            Save(punto);
+            db.SaveChanges();
         }
     }
 }
